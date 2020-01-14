@@ -4,7 +4,7 @@ RUN apk --no-cache add \
     git \
     nodejs \
     nodejs-npm
-
+RUN npm config set unsafe-perm true
 RUN npm install -g bower stylus
 
 WORKDIR /netrunner
