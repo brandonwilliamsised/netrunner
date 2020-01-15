@@ -13,9 +13,7 @@ RUN bower --allow-root install
 RUN stylus src/css -o resources/public/css/
 RUN lein deps
 RUN lein cljsbuild once prod
-RUN lein fetch
 RUN lein uberjar
-
 
 FROM openjdk:8-alpine
 
