@@ -29,5 +29,6 @@ COPY --from=builder /netrunner/src .
 WORKDIR /netrunner
 # make data writable for card fetches
 RUN chmod -R 777 /netrunner/data
+RUN lein fetch
 
 ENTRYPOINT ["java", "-jar", "netrunner-standalone.jar"]
