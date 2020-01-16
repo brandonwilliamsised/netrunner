@@ -4,7 +4,7 @@
 
 (defonce frontend-version (atom "0.1.0"))
 
-(defonce server-mode (atom "prod"))
+(defonce server-mode (atom "dev"))
 
 (let [dev-config (read-config "dev.edn")
       master-filename "config.edn"
