@@ -30,8 +30,6 @@ WORKDIR /netrunner/data
 COPY --from=builder /netrunner/data .
 WORKDIR /netrunner/src
 COPY --from=builder /netrunner/src .
-WORKDIR /netrunner/cards
-COPY --from=builder /netrunner/cards .
 WORKDIR /netrunner
 # make data writable for card fetches TODO: maybe not required
 RUN chmod -R 777 /netrunner/data
