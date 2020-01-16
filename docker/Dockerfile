@@ -14,6 +14,7 @@ RUN stylus src/css -o resources/public/css/
 RUN lein deps
 RUN lein cljsbuild once prod
 RUN lein uberjar
+RUN lein fetch
 
 FROM openjdk:8-alpine
 
@@ -26,9 +27,11 @@ WORKDIR /netrunner/data
 COPY --from=builder /netrunner/data .
 WORKDIR /netrunner/src
 COPY --from=builder /netrunner/src .
+WORKDIR /netrunner/cards
+COPY --from=builder /netrunner/cards .
 WORKDIR /netrunner
 # make data writable for card fetches
 RUN chmod -R 777 /netrunner/data
-RUN lein fetch
+
 
 ENTRYPOINT ["java", "-jar", "netrunner-standalone.jar"]
