@@ -14,6 +14,9 @@ RUN stylus src/css -o resources/public/css/
 RUN lein deps
 RUN lein cljsbuild once prod
 RUN lein uberjar
+# Run fetch here to import card data at build time since /admin/fetch doesn't seem to actually do the db import.
+# - Env var MONGO_CONNECTION_URI must be defined in OCP BuildConfig otherwise this will fail with a db timeout.
+# ie: mongodb://mongo:27017/netrunner
 RUN lein fetch
 
 FROM openjdk:8-alpine
@@ -30,7 +33,7 @@ COPY --from=builder /netrunner/src .
 WORKDIR /netrunner/cards
 COPY --from=builder /netrunner/cards .
 WORKDIR /netrunner
-# make data writable for card fetches
+# make data writable for card fetches TODO: maybe not required
 RUN chmod -R 777 /netrunner/data
 
 
