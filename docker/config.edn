@@ -1,5 +1,5 @@
 {:db
- {:address "mongodb"
+ {:address "mongo"
   :port    27017
   :name    "netrunner"}
  }
