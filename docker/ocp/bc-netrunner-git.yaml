@@ -1,0 +1,49 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  annotations:
+    app.openshift.io/connects-to: mongodb,mongo
+    app.openshift.io/vcs-ref: master
+    app.openshift.io/vcs-uri: https://github.com/brandonwilliamsised/netrunner.git
+  creationTimestamp: null
+  labels:
+    app: netrunner-git
+    app.kubernetes.io/component: netrunner-git
+    app.kubernetes.io/instance: netrunner-git
+    app.kubernetes.io/part-of: netrunner-git-app
+  name: netrunner-git
+  selfLink: /apis/build.openshift.io/v1/namespaces/brandon-test/buildconfigs/netrunner-git
+spec:
+  failedBuildsHistoryLimit: 5
+  nodeSelector: null
+  output:
+    to:
+      kind: ImageStreamTag
+      name: netrunner-git:latest
+  postCommit: {}
+  resources: {}
+  runPolicy: Serial
+  source:
+    git:
+      uri: https://github.com/brandonwilliamsised/netrunner.git
+    type: Git
+  strategy:
+    dockerStrategy:
+      dockerfilePath: docker/Dockerfile
+      env:
+      - name: MONGO_CONNECTION_URI
+        value: mongodb://mongo:27017/netrunner
+    type: Docker
+  successfulBuildsHistoryLimit: 5
+  triggers:
+  - generic:
+      secretReference:
+        name: netrunner-git-generic-webhook-secret
+    type: Generic
+  - github:
+      secretReference:
+        name: netrunner-git-github-webhook-secret
+    type: GitHub
+  - type: ConfigChange
+status:
+  lastVersion: 13

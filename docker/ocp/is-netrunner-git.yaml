@@ -1,0 +1,20 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  annotations:
+    app.openshift.io/vcs-ref: master
+    app.openshift.io/vcs-uri: https://github.com/brandonwilliamsised/netrunner.git
+  creationTimestamp: null
+  generation: 1
+  labels:
+    app: netrunner-git
+    app.kubernetes.io/component: netrunner-git
+    app.kubernetes.io/instance: netrunner-git
+    app.kubernetes.io/part-of: netrunner-git-app
+  name: netrunner-git
+  selfLink: /apis/image.openshift.io/v1/namespaces/brandon-test/imagestreams/netrunner-git
+spec:
+  lookupPolicy:
+    local: false
+status:
+  dockerImageRepository: image-registry.openshift-image-registry.svc:5000/netrunner-git

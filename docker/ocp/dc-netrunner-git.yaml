@@ -1,0 +1,83 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  annotations:
+    app.openshift.io/connects-to: mongodb,mongo
+    app.openshift.io/vcs-ref: master
+    app.openshift.io/vcs-uri: https://github.com/brandonwilliamsised/netrunner.git
+  creationTimestamp: null
+  generation: 1
+  labels:
+    app: netrunner-git
+    app.kubernetes.io/component: netrunner-git
+    app.kubernetes.io/instance: netrunner-git
+    app.kubernetes.io/part-of: netrunner-git-app
+  name: netrunner-git
+  selfLink: /apis/apps.openshift.io/v1/namespaces/brandon-test/deploymentconfigs/netrunner-git
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    app: netrunner-git
+    deploymentconfig: netrunner-git
+  strategy:
+    activeDeadlineSeconds: 21600
+    recreateParams:
+      timeoutSeconds: 600
+    resources: {}
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: netrunner-git
+        deploymentconfig: netrunner-git
+    spec:
+      containers:
+      - env:
+        - name: MONGO_CONNECTION_URI
+          value: mongodb://mongo:27017/netrunner
+        image: image-registry.openshift-image-registry.svc:5000/brandon-test/netrunner-git@sha256:79241de49ae969a81f2bd08c3b8b9ad9c54bbc5602093d0f4e07e5b16757235e
+        imagePullPolicy: Always
+        name: netrunner-git
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /netrunner/config.edn
+          name: netrunner-config
+          subPath: config.edn
+        - mountPath: /netrunner/data/persist
+          name: netrunner-data
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: netrunner-config
+        name: netrunner-config
+      - name: netrunner-data
+        persistentVolumeClaim:
+          claimName: netrunner-data
+  test: false
+  triggers:
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - netrunner-git
+      from:
+        kind: ImageStreamTag
+        name: netrunner-git:latest
+        namespace: brandon-test
+    type: ImageChange
+  - type: ConfigChange
+status:
+  availableReplicas: 0
+  latestVersion: 0
+  observedGeneration: 0
+  replicas: 0
+  unavailableReplicas: 0
+  updatedReplicas: 0
